@@ -194,21 +194,25 @@
             renderSchema();
         });
 
-        // Save schema (Download JSON)
-        document.getElementById("btnSaveSchema").addEventListener("click", () => {
+        // Save schema to backend
+        document.getElementById("btnSaveSchema").addEventListener("click", async () => {
             const dataStr = JSON.stringify(schemaData, null, 2);
-            const blob = new Blob([dataStr], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-            
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "schema.json";
-            document.body.appendChild(a);
-            a.click();
-            
-            // Cleanup
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            try {
+                const response = await fetch('/api/schema', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: dataStr
+                });
+                
+                if (response.ok) {
+                    alert("Lưu cấu trúc thành công vào thư mục json!");
+                } else {
+                    alert("Lỗi khi lưu cấu trúc. Vui lòng kiểm tra lại server.");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Không thể kết nối đến server. Hãy chắc chắn bạn đang chạy file server.py");
+            }
         });
 
         // Initial render
