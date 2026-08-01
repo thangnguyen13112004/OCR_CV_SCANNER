@@ -282,25 +282,32 @@
             // Clean markdown json format if model outputs it
             let cleaned = textContent.replace(/```json/gi, '').replace(/```/g, '').trim();
             
+            // Tìm điểm bắt đầu của JSON (dấu [ hoặc { đầu tiên)
+            let startIndex = cleaned.search(/\[|\{/);
+            if (startIndex !== -1) {
+                cleaned = cleaned.substring(startIndex);
+            }
+            
+            // Xử lý lỗi model dính liền 2 array (VD: ][ hoặc } {)
+            let splitIdx = cleaned.indexOf('][');
+            if (splitIdx !== -1) cleaned = cleaned.substring(0, splitIdx + 1);
+            else {
+                splitIdx = cleaned.indexOf('}\n[');
+                if (splitIdx !== -1) cleaned = cleaned.substring(0, splitIdx + 1);
+            }
+            
+            // Cắt phần đuôi nếu model chat thêm rác (tìm dấu ] hoặc } cuối cùng)
+            let endIndex = Math.max(cleaned.lastIndexOf(']'), cleaned.lastIndexOf('}'));
+            if (endIndex !== -1) {
+                cleaned = cleaned.substring(0, endIndex + 1);
+            }
+
             let parsed = null;
             try {
                 parsed = JSON.parse(cleaned);
             } catch (e) {
-                // Thử cắt bỏ phần rác nếu model trả về 2 khối JSON liền nhau (VD: ][ hoặc } {)
-                let splitIdx = cleaned.indexOf('][');
-                if (splitIdx !== -1) {
-                    cleaned = cleaned.substring(0, splitIdx + 1);
-                } else {
-                    splitIdx = cleaned.indexOf('}\n[');
-                    if (splitIdx !== -1) cleaned = cleaned.substring(0, splitIdx + 1);
-                }
-                
-                try {
-                    parsed = JSON.parse(cleaned);
-                } catch (e2) {
-                    console.error("Vẫn không thể parse JSON:", e2);
-                    throw e2;
-                }
+                console.error("Vẫn không thể parse JSON:", e, textContent);
+                throw new Error("Phản hồi của AI không đúng định dạng JSON.");
             }
             return parsed;
         }
