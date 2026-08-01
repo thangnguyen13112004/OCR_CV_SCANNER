@@ -245,9 +245,7 @@
         }
 
         async function extractWithVintern(base64DataUrl) {
-            const schemaObj = {};
-            currentSchema.forEach(f => schemaObj[f.name] = f.type);
-            const schemaStr = JSON.stringify(schemaObj);
+            const schemaStr = JSON.stringify(currentSchema, null, 2);
             
             const prompt = `Trích xuất các dữ liệu trong ảnh. trả về dạng json theo mẫu:\n${schemaStr}`;
             
@@ -280,13 +278,53 @@
             document.getElementById('rawOutputContent').textContent = textContent;
             
             // Clean markdown json format if model outputs it
-            const cleaned = textContent.replace(/```json/gi, '').replace(/```/g, '').trim();
-            return JSON.parse(cleaned);
+            let cleaned = textContent.replace(/```json/gi, '').replace(/```/g, '').trim();
+            
+            let parsed = null;
+            try {
+                parsed = JSON.parse(cleaned);
+            } catch (e) {
+                // Thử cắt bỏ phần rác nếu model trả về 2 khối JSON liền nhau (VD: ][ hoặc } {)
+                let splitIdx = cleaned.indexOf('][');
+                if (splitIdx !== -1) {
+                    cleaned = cleaned.substring(0, splitIdx + 1);
+                } else {
+                    splitIdx = cleaned.indexOf('}\n[');
+                    if (splitIdx !== -1) cleaned = cleaned.substring(0, splitIdx + 1);
+                }
+                
+                try {
+                    parsed = JSON.parse(cleaned);
+                } catch (e2) {
+                    console.error("Vẫn không thể parse JSON:", e2);
+                    throw e2;
+                }
+            }
+            return parsed;
         }
 
         function fillFormWithJson(jsonObj) {
+            // Nếu trả về một mảng chứa 1 object, lấy object đó
+            if (Array.isArray(jsonObj)) {
+                if (jsonObj.length > 0) jsonObj = jsonObj[0];
+                else return;
+            }
+            
             for (const key in jsonObj) {
-                const input = document.getElementById(key);
+                let input = document.getElementById(key);
+                
+                // Nếu model tự chế ra key (vd: input_address, input Github), ta thử tìm tương đương
+                if (!input) {
+                    const normalizedKey = key.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+                    const allInputs = document.querySelectorAll('input');
+                    for (let i = 0; i < allInputs.length; i++) {
+                        if (allInputs[i].id.toLowerCase() === normalizedKey) {
+                            input = allInputs[i];
+                            break;
+                        }
+                    }
+                }
+                
                 if (input) {
                     input.value = jsonObj[key];
                 }
