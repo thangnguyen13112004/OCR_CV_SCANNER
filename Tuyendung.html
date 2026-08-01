@@ -245,7 +245,8 @@
         }
 
         async function extractWithVintern(base64DataUrl) {
-            const schemaStr = JSON.stringify(currentSchema, null, 2);
+            // Chuyển về dạng chuỗi không có dấu xuống dòng, tương tự json.dumps() mặc định của Python
+            const schemaStr = JSON.stringify(currentSchema);
             
             const prompt = `Trích xuất các dữ liệu trong ảnh. trả về dạng json theo mẫu:\n${schemaStr}`;
             
@@ -263,7 +264,8 @@
                             ]
                         }
                     ],
-                    temperature: 0.1
+                    temperature: 0.1,
+                    max_tokens: 1500
                 })
             });
             
