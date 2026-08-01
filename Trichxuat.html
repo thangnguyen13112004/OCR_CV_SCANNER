@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Untitled</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="assets/css/styles.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md bg-body">
+        <div class="container-fluid"><a class="navbar-brand" href="#">Tâm Anh</a><button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="Tuyendung.html">Tuyển dụng</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="Trichxuat.html">Trích xuất</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Hoso.html">Hồ sơ</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid px-4 py-4" style="background-color: #fafafa; min-height: calc(100vh - 56px);">
+        <!-- Top Section -->
+        <div class="container mb-4">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h2 class="fw-bold mb-1" style="color: #1e293b;">CV - Trích xuất</h2>
+                    <p class="text-muted mb-0" style="font-size: 0.9rem;">Tải lên số lượng file tùy ý • Đã tải lên 1 file</p>
+                </div>
+                <div class="col text-end">
+                    <button class="btn btn-primary fw-medium px-4 py-2" type="button" style="border-radius: 8px;">Tiến hành trích xuất</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Schema Section -->
+        <div class="container">
+            <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+                <div class="card-body p-4 p-lg-5">
+                    <h4 class="card-title fw-bold mb-4" style="color: #334155;">Cấu trúc dữ liệu</h4>
+                    
+                    <div class="schema-table">
+                        <!-- Headers -->
+                        <div class="row mb-3 text-muted fw-semibold" style="font-size: 0.8rem; letter-spacing: 0.5px;">
+                            <div class="col-3 ps-4">TÊN</div>
+                            <div class="col-2">LOẠI</div>
+                            <div class="col-6">MÔ TẢ</div>
+                            <div class="col-1 text-center"></div>
+                        </div>
+                        
+                        <hr class="text-muted opacity-25 mb-3 mt-0">
+
+                        <!-- Rows -->
+                        <div class="schema-rows d-flex flex-column gap-3" id="schemaContainer">
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="row mt-5">
+                            <div class="col d-flex justify-content-end gap-3">
+                                <button class="btn btn-outline-primary fw-medium px-4" type="button" style="border-radius: 8px;" data-bs-toggle="modal" data-bs-target="#addFieldModal">
+                                    <i class="bi bi-plus-lg me-1"></i> Thêm thuộc tính
+                                </button>
+                                <button id="btnSaveSchema" class="btn btn-primary fw-medium px-4" type="button" style="border-radius: 8px;">
+                                    <i class="bi bi-floppy me-1"></i> Lưu cấu trúc
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Field Modal -->
+    <div class="modal fade" id="addFieldModal" tabindex="-1" aria-labelledby="addFieldModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 12px; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+                <div class="modal-header border-0 pb-0 mt-2 px-4">
+                    <h5 class="modal-title fw-bold" id="addFieldModalLabel" style="color: #1e293b; font-size: 1.1rem;">Thêm thuộc tính</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="font-size: 0.8rem;"></button>
+                </div>
+                <div class="modal-body pt-3 pb-4 px-4">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label fw-medium text-dark mb-1" style="font-size: 0.9rem;">Tên</label>
+                            <input id="modalName" type="text" class="form-control" style="border-radius: 8px; border-color: #e2e8f0; padding: 0.5rem 0.75rem; color: #475569;">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-medium text-dark mb-1" style="font-size: 0.9rem;">Loại</label>
+                            <select id="modalType" class="form-select" style="border-radius: 8px; border-color: #e2e8f0; padding: 0.5rem 0.75rem; width: 140px; color: #475569;">
+                                <option value="text" selected>Text</option>
+                                <option value="number">Number</option>
+                                <option value="date">Date</option>
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label fw-medium text-dark mb-1" style="font-size: 0.9rem;">Mô tả</label>
+                            <input id="modalDesc" type="text" class="form-control" style="border-radius: 8px; border-color: #e2e8f0; padding: 0.5rem 0.75rem; color: #475569;">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0 pt-0 px-4 pb-4">
+                    <button type="button" class="btn btn-light fw-medium px-4" data-bs-dismiss="modal" style="border-radius: 8px; border: 1px solid #e2e8f0; background-color: #fff; color: #475569;">Hủy</button>
+                    <button id="btnAddSchema" type="button" class="btn btn-dark fw-medium px-4" style="border-radius: 8px; background-color: #0f172a;">Thêm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        let schemaData = [
+            { name: "name", type: "text", description: "Họ và tên của cá nhân" },
+            { name: "email", type: "text", description: "Địa chỉ email liên hệ" },
+            { name: "linkedinProfile", type: "text", description: "URL hồ sơ LinkedIn" },
+            { name: "blogUrl", type: "text", description: "URL blog cá nhân hoặc chuyên ngành" },
+            { name: "topSkills", type: "text", description: "Danh sách kỹ năng chính hoặc lĩnh vực chuyên môn" }
+        ];
+
+        function renderSchema() {
+            const container = document.getElementById("schemaContainer");
+            container.innerHTML = "";
+            schemaData.forEach((item, index) => {
+                const row = document.createElement("div");
+                row.className = "row align-items-center mb-1";
+                row.innerHTML = `
+                    <div class="col-3">
+                        <input type="text" class="form-control schema-input" data-index="${index}" data-field="name" value="${item.name}" style="border-radius: 8px; border-color: #e2e8f0; color: #475569; padding: 0.5rem 0.75rem;">
+                    </div>
+                    <div class="col-2">
+                        <select class="form-select schema-input" data-index="${index}" data-field="type" style="border-radius: 8px; border-color: #e2e8f0; color: #475569; padding: 0.5rem 0.75rem;">
+                            <option value="text" ${item.type === 'text' ? 'selected' : ''}>Text</option>
+                            <option value="number" ${item.type === 'number' ? 'selected' : ''}>Number</option>
+                            <option value="date" ${item.type === 'date' ? 'selected' : ''}>Date</option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <input type="text" class="form-control schema-input" data-index="${index}" data-field="description" value="${item.description}" style="border-radius: 8px; border-color: #e2e8f0; color: #475569; padding: 0.5rem 0.75rem;">
+                    </div>
+                    <div class="col-1 text-center">
+                        <button class="btn btn-sm d-inline-flex align-items-center justify-content-center btn-delete-schema" data-index="${index}" style="width: 36px; height: 36px; border-radius: 8px; background-color: #fef2f2; border: 1px solid #fecaca; color: #ef4444; transition: all 0.2s;">
+                            <i class="bi bi-trash3"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+
+            // Re-attach event listeners
+            document.querySelectorAll(".schema-input").forEach(input => {
+                input.addEventListener("input", (e) => {
+                    const idx = e.target.getAttribute("data-index");
+                    const field = e.target.getAttribute("data-field");
+                    schemaData[idx][field] = e.target.value;
+                });
+            });
+
+            document.querySelectorAll(".btn-delete-schema").forEach(btn => {
+                btn.addEventListener("click", (e) => {
+                    const idx = e.currentTarget.getAttribute("data-index");
+                    schemaData.splice(idx, 1);
+                    renderSchema();
+                });
+            });
+        }
+
+        // Add new field
+        document.getElementById("btnAddSchema").addEventListener("click", () => {
+            const name = document.getElementById("modalName").value;
+            const type = document.getElementById("modalType").value;
+            const desc = document.getElementById("modalDesc").value;
+
+            if (name.trim() === "") {
+                alert("Vui lòng nhập tên thuộc tính.");
+                return;
+            }
+
+            schemaData.push({ name: name, type: type, description: desc });
+            
+            // Close modal using standard BS5 method without accessing global bootstrap var safely
+            const modalEl = document.getElementById('addFieldModal');
+            let modal = bootstrap.Modal.getInstance(modalEl);
+            if (!modal) modal = new bootstrap.Modal(modalEl);
+            modal.hide();
+            
+            // Clear inputs
+            document.getElementById("modalName").value = "";
+            document.getElementById("modalDesc").value = "";
+            
+            renderSchema();
+        });
+
+        // Save schema (Download JSON)
+        document.getElementById("btnSaveSchema").addEventListener("click", () => {
+            const dataStr = JSON.stringify(schemaData, null, 2);
+            const blob = new Blob([dataStr], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "schema.json";
+            document.body.appendChild(a);
+            a.click();
+            
+            // Cleanup
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        // Initial render
+        renderSchema();
+    </script>
+</body>
+
+</html>

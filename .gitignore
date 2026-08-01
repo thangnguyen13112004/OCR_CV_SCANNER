@@ -1,0 +1,18 @@
+# Bỏ qua môi trường ảo Python
+venv/
+env/
+
+# Bỏ qua các file cache và file biên dịch của Python
+__pycache__/
+*.pyc
+
+# Bỏ qua các file tạm của Jupyter Notebook
+.ipynb_checkpoints/
+dataset_cv/
+
+# (Tùy chọn) Bỏ qua file kết quả sinh ra tự động để tránh xung đột
+ket_qua_ocr.txt
+
+# Bỏ qua các file hệ thống tự sinh ra (Mac/Windows)
+.DS_Store
+Thumbs.db

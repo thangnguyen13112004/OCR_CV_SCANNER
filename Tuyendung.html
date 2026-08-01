@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Untitled</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/styles.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md bg-body">
+        <div class="container-fluid"><a class="navbar-brand" href="#">Tâm Anh</a><button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link active" href="Tuyendung.html">Tuyển dụng</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Trichxuat.html">Trích xuất</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Hoso.html">Hồ sơ</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main class="mb-5 container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <form>
+                    <section class="mb-5">
+                        <h5 class="text-uppercase fw-bold text-secondary mb-4" style="font-size:0.9rem;">Gửi hồ sơ ứng tuyển</h5>
+                        <div class="row align-items-center mb-3"><label class="col-sm-4 col-form-label">Hồ sơ/CV <span class="text-danger">*</span></label>
+                            <div class="col-sm-8">
+                                <label class="text-uppercase fw-bold text-secondary border px-3 py-2 btn btn-light mb-0" style="font-size:0.75rem;background-color:#f1f3f5; cursor: pointer;">
+                                    <svg class="bi bi-paperclip me-1" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" style="font-size: 20px;">
+                                        <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0z"></path>
+                                    </svg> Đính kèm Hồ sơ/CV <input id="fileUpload" type="file" hidden="" required="" accept=".pdf, .docx, .jpg, .jpeg, .png">
+                                </label>
+                                <div id="loadingIndicator" class="d-none mt-2 text-primary fw-medium" style="font-size: 0.85rem;">
+                                    <div class="spinner-border spinner-border-sm me-2" role="status"></div><span id="loadingText">Đang phân tích CV...</span>
+                                </div>
+                                <div id="successMessage" class="d-none mt-2 text-success fw-medium" style="font-size: 0.85rem;">
+                                    <i class="bi bi-check-circle me-1"></i><span id="successText"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3"><label class="col-sm-4 col-form-label">Họ và tên <span class="text-danger">*</span></label>
+                            <div class="col-sm-8"><input id="inputName" class="form-control" type="text" required=""></div>
+                        </div>
+                        <div class="row mb-3"><label class="col-sm-4 col-form-label">Email <span class="text-danger">*</span></label>
+                            <div class="col-sm-8"><input id="inputEmail" class="form-control" type="email" required=""></div>
+                        </div>
+                        <div class="row mb-3"><label class="col-sm-4 col-form-label">Số điện thoại <span class="text-danger">*</span></label>
+                            <div class="col-sm-8"><input id="inputPhone" class="form-control" type="tel" required=""></div>
+                        </div>
+                        <div class="row mb-3"><label class="col-sm-4 col-form-label">Địa chỉ hiện tại <span class="text-danger">*</span></label>
+                            <div class="col-sm-8"><input id="inputAddress" class="form-control" type="text" required=""></div>
+                        </div>
+                        <div class="row mb-3"><label class="col-sm-4 col-form-label">Công ty hiện tại <span class="text-danger">*</span></label>
+                            <div class="col-sm-8"><input id="inputCompany" class="form-control" type="text" required=""></div>
+                        </div>
+                    </section>
+                    <section class="mb-4">
+                        <h5 class="text-uppercase fw-bold text-secondary mb-4" style="font-size:0.9rem;">Liên kết</h5>
+                        <div class="row mb-3"><label class="col-sm-4 col-form-label">LinkedIn URL</label>
+                            <div class="col-sm-8"><input id="inputLinkedin" class="form-control" type="url"></div>
+                        </div>
+                        <div class="row mb-3"><label class="col-sm-4 col-form-label">Twitter URL</label>
+                            <div class="col-sm-8"><input id="inputTwitter" class="form-control" type="url"></div>
+                        </div>
+                        <section class="mb-4">
+                            <div class="row mb-3"><label class="col-sm-4 col-form-label">Gmail</label>
+                                <div class="col-sm-8"><input id="inputGmail" class="form-control" type="url"></div>
+                            </div>
+                            <div class="row mb-3"><label class="col-sm-4 col-form-label">Github/Portfolio URL</label>
+                                <div class="col-sm-8"><input id="inputGithub" class="form-control" type="url"></div>
+                            </div>
+                        </section>
+                    </section>
+                    <div class="text-end"><button class="btn btn-primary px-4 py-2" type="submit">Gửi ứng tuyển</button></div>
+                </form>
+            </div>
+        </div>
+    </main>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Libraries for text extraction -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+    <script>
+        // Setup PDF.js worker
+        if (window['pdfjs-dist/build/pdf']) {
+            window['pdfjs-dist/build/pdf'].GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+        }
+
+        const fileUpload = document.getElementById('fileUpload');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const loadingText = document.getElementById('loadingText');
+        const successMessage = document.getElementById('successMessage');
+        const successText = document.getElementById('successText');
+
+        fileUpload.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Show loading
+            loadingIndicator.classList.remove('d-none');
+            if (successMessage) successMessage.classList.add('d-none');
+            const fileExt = file.name.split('.').pop().toLowerCase();
+            let rawText = '';
+            
+            const startTime = performance.now();
+
+            try {
+                if (fileExt === 'pdf') {
+                    loadingText.innerText = "Đang đọc file PDF...";
+                    rawText = await extractTextFromPDF(file);
+                } else if (fileExt === 'docx') {
+                    loadingText.innerText = "Đang đọc file DOCX...";
+                    rawText = await extractTextFromDOCX(file);
+                } else if (['jpg', 'jpeg', 'png'].includes(fileExt)) {
+                    loadingText.innerText = "Đang quét ảnh (OCR)... (Có thể mất 2-5 giây)";
+                    rawText = await extractTextFromImage(file);
+                } else {
+                    alert('Vui lòng chọn file định dạng PDF, DOCX hoặc Ảnh.');
+                    loadingIndicator.classList.add('d-none');
+                    return;
+                }
+
+                console.log("Extracted Text:", rawText);
+                
+                // Parse and fill form
+                fillFormWithExtractedData(rawText);
+
+                const endTime = performance.now();
+                const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
+                console.log(`Thời gian trích xuất: ${timeTaken} giây`);
+                if (successMessage) {
+                    successMessage.classList.remove('d-none');
+                    successText.innerText = `Trích xuất hoàn tất trong ${timeTaken} giây.`;
+                }
+
+            } catch (error) {
+                console.error("Lỗi khi xử lý file:", error);
+                alert("Có lỗi xảy ra khi đọc file. Vui lòng thử lại.");
+            } finally {
+                loadingIndicator.classList.add('d-none');
+                fileUpload.value = ''; // reset file input so same file can trigger change again if needed
+            }
+        });
+
+        async function extractTextFromPDF(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = async function() {
+                    try {
+                        const typedarray = new Uint8Array(this.result);
+                        const pdf = await window['pdfjs-dist/build/pdf'].getDocument(typedarray).promise;
+                        let text = '';
+                        for (let i = 1; i <= pdf.numPages; i++) {
+                            const page = await pdf.getPage(i);
+                            const textContent = await page.getTextContent();
+                            text += textContent.items.map(item => item.str).join(' ') + '\n';
+                        }
+                        resolve(text);
+                    } catch (err) {
+                        reject(err);
+                    }
+                };
+                reader.onerror = reject;
+                reader.readAsArrayBuffer(file);
+            });
+        }
+
+        async function extractTextFromDOCX(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const arrayBuffer = e.target.result;
+                    mammoth.extractRawText({arrayBuffer: arrayBuffer})
+                        .then(function(result){
+                            resolve(result.value);
+                        })
+                        .catch(reject);
+                };
+                reader.onerror = reject;
+                reader.readAsArrayBuffer(file);
+            });
+        }
+
+        async function extractTextFromImage(file) {
+            const result = await Tesseract.recognize(file, 'vie+eng', {
+                logger: m => console.log(m)
+            });
+            return result.data.text;
+        }
+
+        function fillFormWithExtractedData(text) {
+            // 1. Email
+            const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/;
+            const emailMatch = text.match(emailRegex);
+            if (emailMatch && document.getElementById('inputEmail')) {
+                document.getElementById('inputEmail').value = emailMatch[0];
+            }
+
+            // 2. Phone
+            // Regex cho số điện thoại kiểu Việt Nam (+84, 09, 03...)
+            const phoneRegex = /(?:(?:\+?84|0)(?:\s|\.)?)?[35789]\d{1}(?:\s|\.)?\d{3}(?:\s|\.)?\d{4}\b/;
+            const phoneMatch = text.match(phoneRegex);
+            if (phoneMatch && document.getElementById('inputPhone')) {
+                const cleanedPhone = phoneMatch[0].replace(/[\s\.]/g, ''); // Xóa khoảng trắng/dấu chấm
+                document.getElementById('inputPhone').value = cleanedPhone;
+            }
+
+            // 3. LinkedIn
+            const linkedinRegex = /(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+/;
+            const linkedinMatch = text.match(linkedinRegex);
+            if (linkedinMatch && document.getElementById('inputLinkedin')) {
+                let url = linkedinMatch[0];
+                if (!url.startsWith('http')) url = 'https://' + url;
+                document.getElementById('inputLinkedin').value = url;
+            }
+
+            // 4. Tên (Heuristic: lấy dòng đầu tiên hoặc thứ 2 trông có vẻ giống Tên)
+            const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 3 && l.split(' ').length >= 2 && l.split(' ').length <= 5);
+            if (lines.length > 0 && document.getElementById('inputName')) {
+                const nameCandidate = lines.find(l => !/curriculum|vitae|resume|sơ yếu|lý lịch/i.test(l));
+                if (nameCandidate && !document.getElementById('inputName').value) {
+                    // Chữ cái đầu mỗi từ viết hoa (cho đẹp)
+                    const formattedName = nameCandidate.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+                    document.getElementById('inputName').value = formattedName;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

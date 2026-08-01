@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Hồ sơ - Tâm Anh</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/styles.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        .queue-item { cursor: pointer; transition: background-color 0.2s, border-left-color 0.2s; }
+        .queue-item:hover { background-color: #f1f5f9 !important; }
+        .queue-item.active { border-left-color: #2563eb !important; background-color: #eff6ff !important; }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md bg-body">
+        <div class="container-fluid"><a class="navbar-brand" href="#">Tâm Anh</a><button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="Tuyendung.html">Tuyển dụng</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Trichxuat.html">Trích xuất</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="Hoso.html">Hồ sơ</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid px-4 py-4" style="background-color: #f4f6f8; min-height: calc(100vh - 56px);">
+        <div class="row h-100">
+            <!-- Left Sidebar -->
+            <div class="col-md-4 col-lg-3 d-flex flex-column mb-4 mb-md-0">
+                <div class="card border-0 rounded-4 p-4 h-100" style="box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+                    <div class="text-secondary fw-bold mb-3" style="font-size: 0.8rem; letter-spacing: 0.5px;">SOURCES</div>
+                    
+                    <!-- Upload Area -->
+                    <label for="fileInput" class="upload-area mb-4 d-flex flex-column align-items-center justify-content-center w-100" style="border: 2px dashed #e2e8f0; border-radius: 12px; padding: 35px 15px; cursor: pointer; transition: all 0.2s; background-color: #fcfcfc;">
+                        <div class="icon-wrapper mb-3 d-flex align-items-center justify-content-center" style="background-color: #eff6ff; color: #3b82f6; border-radius: 10px; width: 48px; height: 48px;">
+                            <i class="bi bi-file-earmark-plus fs-4"></i>
+                        </div>
+                        <div class="fw-bold mb-1" style="font-size: 0.95rem; color: #334155;">Thêm file (PDF, DOCX, Ảnh)</div>
+                        <div class="text-muted" style="font-size: 0.8rem;">Click để chọn nhiều file</div>
+                        <input type="file" id="fileInput" multiple accept=".pdf,.docx,.doc,.jpg,.jpeg,.png" style="display: none;">
+                    </label>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="text-secondary fw-bold" style="font-size: 0.8rem; letter-spacing: 0.5px;">HÀNG ĐỢI</div>
+                        <span class="badge bg-secondary" id="queueCount">0</span>
+                    </div>
+                    
+                    <!-- Queue List -->
+                    <div id="queueList" class="queue-list flex-grow-1 overflow-auto" style="max-height: 450px;">
+                        <!-- JS populated queue items -->
+                        <div class="text-center text-muted mt-4" style="font-size: 0.85rem;">Chưa có file nào trong hàng đợi</div>
+                    </div>
+
+                    <!-- CPU Status -->
+                    <div class="w-100 mt-4 py-2 fw-semibold rounded-3 d-flex align-items-center justify-content-center text-secondary" style="background-color: #f8fafc; border: 1px solid #e2e8f0; transition: all 0.3s;">
+                        <i class="bi bi-cpu fs-5 me-2"></i> <span id="cpuStatus" style="font-size: 0.9rem;">Khởi tạo...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Content -->
+            <div class="col-md-8 col-lg-9">
+                <div class="card h-100 border-0 rounded-4" style="box-shadow: 0 4px 12px rgba(0,0,0,0.03); overflow: hidden;">
+                    <!-- Header -->
+                    <div class="card-header bg-white border-bottom py-3 px-4 d-flex justify-content-between align-items-center">
+                        <h5 id="rightPanelTitle" class="mb-0 fw-bold text-truncate" style="font-size: 1.1rem; color: #1e293b; max-width: 60%;">Chưa chọn file</h5>
+                        <div class="d-flex gap-2">
+                            <button id="btnCopy" class="btn btn-outline-secondary btn-sm px-3 fw-medium d-flex align-items-center rounded-3">
+                                <i class="bi bi-copy me-2"></i> Copy
+                            </button>
+                            <button id="btnDownload" class="btn btn-primary btn-sm px-3 fw-medium d-flex align-items-center rounded-3 shadow-sm" style="background-color: #2563eb; border-color: #2563eb;">
+                                <i class="bi bi-download me-2"></i> Tải .md
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Subheader -->
+                    <div class="bg-light px-4 py-3 border-bottom d-flex align-items-center">
+                        <span id="rightPanelSubTitle" class="fw-semibold text-dark me-2" style="font-size: 0.9rem;">Vui lòng chọn một file đã xử lý xong từ hàng đợi</span>
+                    </div>
+
+                    <!-- Markdown Content -->
+                    <div id="rightPanelContent" class="card-body p-4 p-lg-5" style="overflow-y: auto; color: #475569; font-size: 0.95rem; line-height: 1.8; white-space: pre-wrap; font-family: monospace;">
+                        <!-- Text will be rendered here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+    <script>
+        // PDF.js worker setup
+        if (window['pdfjs-dist/build/pdf']) {
+            window['pdfjs-dist/build/pdf'].GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+        }
+
+        const fileInput = document.getElementById('fileInput');
+        const queueList = document.getElementById('queueList');
+        const queueCount = document.getElementById('queueCount');
+        const cpuStatus = document.getElementById('cpuStatus');
+        const rightPanelTitle = document.getElementById('rightPanelTitle');
+        const rightPanelSubTitle = document.getElementById('rightPanelSubTitle');
+        const rightPanelContent = document.getElementById('rightPanelContent');
+        const btnCopy = document.getElementById('btnCopy');
+        const btnDownload = document.getElementById('btnDownload');
+
+        // Queue Management
+        let queue = [];
+        let activeJobs = 0;
+        const maxConcurrency = navigator.hardwareConcurrency || 4; // CPU Cores limit
+        
+        cpuStatus.innerText = `Sẵn sàng (n_jobs = ${maxConcurrency})`;
+
+        // File selection event
+        fileInput.addEventListener('change', (e) => {
+            const files = e.target.files;
+            if (files.length === 0) return;
+
+            if (queue.length === 0) {
+                queueList.innerHTML = ''; // clear empty state
+            }
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const id = 'file_' + Date.now() + '_' + i;
+                
+                const queueItem = {
+                    id: id,
+                    file: file,
+                    status: 'pending', // pending, processing, completed, error
+                    text: '',
+                    timeTaken: 0,
+                    size: formatBytes(file.size)
+                };
+                
+                queue.push(queueItem);
+                renderQueueItem(queueItem);
+            }
+            
+            updateQueueCount();
+            processQueue(); // Start processing
+            
+            fileInput.value = ''; // Reset input
+        });
+
+        function updateQueueCount() {
+            queueCount.innerText = queue.length;
+        }
+
+        function renderQueueItem(item) {
+            let icon = 'bi-file-earmark';
+            let iconColor = 'text-secondary';
+            const ext = item.file.name.split('.').pop().toLowerCase();
+            
+            if (ext === 'pdf') {
+                icon = 'bi-filetype-pdf';
+                iconColor = 'text-danger';
+            } else if (['doc', 'docx'].includes(ext)) {
+                icon = 'bi-filetype-doc';
+                iconColor = 'text-primary';
+            } else if (['jpg', 'jpeg', 'png'].includes(ext)) {
+                icon = 'bi-image';
+                iconColor = 'text-success';
+            }
+
+            let statusHtml = `<span class="badge rounded-pill me-2 text-bg-secondary" style="font-weight: 500; font-size: 0.7rem; padding: 0.35em 0.65em;" id="status_${item.id}">Đang chờ</span>`;
+            
+            const div = document.createElement('div');
+            div.className = 'queue-item d-flex align-items-center p-3 rounded-3 mb-2 bg-white';
+            div.style = 'border: 1px solid #e2e8f0; border-left: 4px solid #cbd5e1;';
+            div.id = `item_${item.id}`;
+            
+            div.innerHTML = `
+                <i class="bi ${icon} ${iconColor} fs-3 me-3 opacity-75"></i>
+                <div class="flex-grow-1 overflow-hidden">
+                    <div class="text-truncate fw-semibold mb-1" style="font-size: 0.9rem; color: #334155;" title="${item.file.name}">${item.file.name}</div>
+                    <div class="d-flex align-items-center">
+                        ${statusHtml}
+                        <span class="text-muted" style="font-size: 0.75rem;">${item.size} <span id="time_${item.id}"></span></span>
+                    </div>
+                </div>
+                <button class="btn btn-sm text-danger border-0 px-2 py-1 ms-2" title="Xóa" onclick="deleteQueueItem(event, '${item.id}')">
+                    <i class="bi bi-trash"></i>
+                </button>
+            `;
+            
+            div.addEventListener('click', () => {
+                showFileContent(item.id);
+            });
+
+            queueList.appendChild(div);
+        }
+
+        window.deleteQueueItem = function(event, id) {
+            event.stopPropagation();
+            
+            const itemIndex = queue.findIndex(q => q.id === id);
+            if (itemIndex > -1) {
+                queue.splice(itemIndex, 1);
+            }
+            
+            const itemDiv = document.getElementById(`item_${id}`);
+            const wasActive = itemDiv && itemDiv.classList.contains('active');
+            if (itemDiv) itemDiv.remove();
+            
+            updateQueueCount();
+            
+            if (wasActive) {
+                rightPanelTitle.innerText = 'Chưa chọn file';
+                rightPanelSubTitle.innerText = 'Vui lòng chọn một file đã xử lý xong từ hàng đợi';
+                rightPanelContent.innerText = '';
+            }
+            
+            if (queue.length === 0) {
+                queueList.innerHTML = '<div class="text-center text-muted mt-4" style="font-size: 0.85rem;">Chưa có file nào trong hàng đợi</div>';
+            }
+        };
+
+        function updateItemStatusUI(id, status, timeTaken = null) {
+            const itemDiv = document.getElementById(`item_${id}`);
+            const statusSpan = document.getElementById(`status_${id}`);
+            const timeSpan = document.getElementById(`time_${id}`);
+            
+            if (!itemDiv) return;
+
+            if (status === 'processing') {
+                itemDiv.style.borderLeftColor = '#eab308'; // yellow
+                statusSpan.className = 'badge rounded-pill me-2 text-bg-warning text-dark';
+                statusSpan.innerHTML = '<span class="spinner-border spinner-border-sm me-1" style="width: 0.7rem; height: 0.7rem;" role="status"></span>Đang xử lý';
+            } else if (status === 'completed') {
+                itemDiv.style.borderLeftColor = '#22c55e'; // green
+                statusSpan.className = 'badge rounded-pill me-2';
+                statusSpan.style.backgroundColor = '#dcfce7';
+                statusSpan.style.color = '#166534';
+                statusSpan.innerText = 'Hoàn tất';
+                if (timeTaken) {
+                    timeSpan.innerText = `· ${timeTaken}s`;
+                }
+            } else if (status === 'error') {
+                itemDiv.style.borderLeftColor = '#ef4444'; // red
+                statusSpan.className = 'badge rounded-pill me-2 text-bg-danger';
+                statusSpan.innerText = 'Lỗi';
+            }
+        }
+
+        async function processQueue() {
+            // Check if we can start a new job
+            if (activeJobs >= maxConcurrency) {
+                return; // Reached CPU limit
+            }
+
+            // Find next pending item
+            const nextItem = queue.find(q => q.status === 'pending');
+            if (!nextItem) {
+                // Queue finished or all items are processing
+                if (activeJobs === 0) {
+                    cpuStatus.innerText = `Sẵn sàng (n_jobs = ${maxConcurrency})`;
+                    cpuStatus.parentElement.classList.remove('bg-primary', 'text-white');
+                    cpuStatus.parentElement.classList.add('bg-white', 'text-secondary');
+                }
+                return;
+            }
+
+            // Start processing
+            nextItem.status = 'processing';
+            activeJobs++;
+            
+            updateItemStatusUI(nextItem.id, 'processing');
+            cpuStatus.innerText = `Đang xử lý ${activeJobs}/${maxConcurrency} luồng`;
+            cpuStatus.parentElement.classList.remove('bg-white', 'text-secondary');
+            cpuStatus.parentElement.classList.add('bg-primary', 'text-white');
+
+            const startTime = performance.now();
+            const ext = nextItem.file.name.split('.').pop().toLowerCase();
+
+            try {
+                let text = '';
+                if (ext === 'pdf') {
+                    text = await extractTextFromPDF(nextItem.file);
+                } else if (['doc', 'docx'].includes(ext)) {
+                    text = await extractTextFromDOCX(nextItem.file);
+                } else if (['jpg', 'jpeg', 'png'].includes(ext)) {
+                    text = await extractTextFromImage(nextItem.file);
+                } else {
+                    text = 'Định dạng không được hỗ trợ.';
+                }
+
+                nextItem.text = text;
+                nextItem.status = 'completed';
+            } catch (error) {
+                console.error("Lỗi khi xử lý:", error);
+                nextItem.text = `Lỗi trong quá trình trích xuất: ${error.message || error}`;
+                nextItem.status = 'error';
+            } finally {
+                const endTime = performance.now();
+                nextItem.timeTaken = ((endTime - startTime) / 1000).toFixed(2);
+                
+                updateItemStatusUI(nextItem.id, nextItem.status, nextItem.timeTaken);
+                
+                activeJobs--;
+                
+                // If this item is currently selected, update the right panel
+                const currentSelected = document.querySelector('.queue-item.active');
+                if (currentSelected && currentSelected.id === `item_${nextItem.id}`) {
+                    showFileContent(nextItem.id);
+                }
+
+                // Process next in queue
+                processQueue();
+            }
+        }
+
+        function showFileContent(id) {
+            // Update active state in list
+            document.querySelectorAll('.queue-item').forEach(el => el.classList.remove('active'));
+            const itemDiv = document.getElementById(`item_${id}`);
+            if (itemDiv) itemDiv.classList.add('active');
+
+            const item = queue.find(q => q.id === id);
+            if (!item) return;
+
+            rightPanelTitle.innerText = item.file.name;
+            
+            if (item.status === 'completed') {
+                rightPanelSubTitle.innerText = `Hoàn tất trong ${item.timeTaken}s · ${item.size} · ${item.text.length} ký tự`;
+                rightPanelContent.innerText = item.text || '(Không có nội dung text)';
+            } else if (item.status === 'processing') {
+                rightPanelSubTitle.innerText = `Đang xử lý...`;
+                rightPanelContent.innerHTML = `<div class="text-center mt-5"><div class="spinner-border text-primary" role="status"></div><div class="mt-3 text-muted">Đang phân tích nội dung...</div></div>`;
+            } else if (item.status === 'error') {
+                rightPanelSubTitle.innerText = `Gặp lỗi trong lúc trích xuất`;
+                rightPanelContent.innerText = item.text;
+            } else {
+                rightPanelSubTitle.innerText = `Đang chờ tới lượt xử lý...`;
+                rightPanelContent.innerText = '...';
+            }
+        }
+
+        // --- Extraction Functions ---
+        async function extractTextFromPDF(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = async function() {
+                    try {
+                        const typedarray = new Uint8Array(this.result);
+                        const pdf = await window['pdfjs-dist/build/pdf'].getDocument(typedarray).promise;
+                        let text = '';
+                        for (let i = 1; i <= pdf.numPages; i++) {
+                            const page = await pdf.getPage(i);
+                            const textContent = await page.getTextContent();
+                            text += textContent.items.map(item => item.str).join(' ') + '\\n';
+                        }
+                        resolve(text);
+                    } catch (err) {
+                        reject(err);
+                    }
+                };
+                reader.onerror = reject;
+                reader.readAsArrayBuffer(file);
+            });
+        }
+
+        async function extractTextFromDOCX(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const arrayBuffer = e.target.result;
+                    mammoth.extractRawText({arrayBuffer: arrayBuffer})
+                        .then(function(result){
+                            resolve(result.value);
+                        })
+                        .catch(reject);
+                };
+                reader.onerror = reject;
+                reader.readAsArrayBuffer(file);
+            });
+        }
+
+        async function extractTextFromImage(file) {
+            const result = await Tesseract.recognize(file, 'vie+eng', {
+                logger: m => {} 
+            });
+            return result.data.text;
+        }
+
+        // Helper
+        function formatBytes(bytes, decimals = 2) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+        }
+
+        // Copy button
+        btnCopy.addEventListener('click', () => {
+            const text = rightPanelContent.innerText;
+            if (text) {
+                navigator.clipboard.writeText(text).then(() => {
+                    const origHtml = btnCopy.innerHTML;
+                    btnCopy.innerHTML = '<i class="bi bi-check2"></i> Copied';
+                    setTimeout(() => btnCopy.innerHTML = origHtml, 2000);
+                });
+            }
+        });
+
+        // Download button
+        btnDownload.addEventListener('click', () => {
+            const text = rightPanelContent.innerText;
+            const title = rightPanelTitle.innerText;
+            if (text && title !== 'Chưa chọn file') {
+                const blob = new Blob([text], { type: 'text/markdown' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = title.replace(/\.[^/.]+$/, "") + '.md';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+        });
+
+    </script>
+</body>
+
+</html>
