@@ -87,6 +87,16 @@
                     </section>
                     <div class="text-end"><button class="btn btn-primary px-4 py-2" type="submit">Gửi ứng tuyển</button></div>
                 </form>
+                
+                <!-- Raw Output Section -->
+                <div id="rawOutputSection" class="mt-5 d-none">
+                    <h5 class="text-uppercase fw-bold text-secondary mb-3" style="font-size:0.9rem;">Kết quả trả về thô (Raw Output)</h5>
+                    <div class="card bg-light border-0">
+                        <div class="card-body p-3">
+                            <pre id="rawOutputContent" class="mb-0" style="white-space: pre-wrap; word-wrap: break-word; font-size: 0.85rem; color: #333; font-family: monospace;"></pre>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -131,6 +141,10 @@
 
             const selectedModel = document.getElementById('modelSelect').value;
 
+            // Hide raw output on new upload
+            document.getElementById('rawOutputSection').classList.add('d-none');
+            document.getElementById('rawOutputContent').textContent = '';
+
             // Show loading
             loadingIndicator.classList.remove('d-none');
             if (successMessage) successMessage.classList.add('d-none');
@@ -174,6 +188,9 @@
                     }
 
                     console.log("Extracted Text:", rawText);
+                    document.getElementById('rawOutputSection').classList.remove('d-none');
+                    document.getElementById('rawOutputContent').textContent = rawText;
+                    
                     fillFormWithExtractedData(rawText);
                 }
 
@@ -232,7 +249,7 @@
             currentSchema.forEach(f => schemaObj[f.name] = f.type);
             const schemaStr = JSON.stringify(schemaObj);
             
-            const prompt = `Trích xuất thông tin từ ảnh này và trả về ĐÚNG định dạng JSON sau, không giải thích thêm: ${schemaStr}`;
+            const prompt = `Trích xuất các dữ liệu trong ảnh. trả về dạng json theo mẫu:\n${schemaStr}`;
             
             const response = await fetch('http://localhost:8000/v1/chat/completions', {
                 method: 'POST',
@@ -257,6 +274,10 @@
             }
             const data = await response.json();
             const textContent = data.choices[0].message.content;
+            
+            // Display raw output
+            document.getElementById('rawOutputSection').classList.remove('d-none');
+            document.getElementById('rawOutputContent').textContent = textContent;
             
             // Clean markdown json format if model outputs it
             const cleaned = textContent.replace(/```json/gi, '').replace(/```/g, '').trim();
