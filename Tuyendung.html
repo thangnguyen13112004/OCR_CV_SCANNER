@@ -52,10 +52,38 @@
                                 </div>
                             </div>
                         </div>
-                        <hr class="mb-4">
-                        <div id="dynamicFormFields">
-                            <!-- Form fields will be rendered here based on schema.json -->
+                        <div class="row mb-3"><label class="col-sm-4 col-form-label">Họ và tên <span class="text-danger">*</span></label>
+                            <div class="col-sm-8"><input id="inputName" class="form-control" type="text" required=""></div>
                         </div>
+                        <div class="row mb-3"><label class="col-sm-4 col-form-label">Email <span class="text-danger">*</span></label>
+                            <div class="col-sm-8"><input id="inputEmail" class="form-control" type="email" required=""></div>
+                        </div>
+                        <div class="row mb-3"><label class="col-sm-4 col-form-label">Số điện thoại <span class="text-danger">*</span></label>
+                            <div class="col-sm-8"><input id="inputPhone" class="form-control" type="tel" required=""></div>
+                        </div>
+                        <div class="row mb-3"><label class="col-sm-4 col-form-label">Địa chỉ hiện tại <span class="text-danger">*</span></label>
+                            <div class="col-sm-8"><input id="inputAddress" class="form-control" type="text" required=""></div>
+                        </div>
+                        <div class="row mb-3"><label class="col-sm-4 col-form-label">Công ty hiện tại <span class="text-danger">*</span></label>
+                            <div class="col-sm-8"><input id="inputCompany" class="form-control" type="text" required=""></div>
+                        </div>
+                    </section>
+                    <section class="mb-4">
+                        <h5 class="text-uppercase fw-bold text-secondary mb-4" style="font-size:0.9rem;">Liên kết</h5>
+                        <div class="row mb-3"><label class="col-sm-4 col-form-label">LinkedIn URL</label>
+                            <div class="col-sm-8"><input id="inputLinkedin" class="form-control" type="url"></div>
+                        </div>
+                        <div class="row mb-3"><label class="col-sm-4 col-form-label">Twitter URL</label>
+                            <div class="col-sm-8"><input id="inputTwitter" class="form-control" type="url"></div>
+                        </div>
+                        <section class="mb-4">
+                            <div class="row mb-3"><label class="col-sm-4 col-form-label">Gmail</label>
+                                <div class="col-sm-8"><input id="inputGmail" class="form-control" type="url"></div>
+                            </div>
+                            <div class="row mb-3"><label class="col-sm-4 col-form-label">Github/Portfolio URL</label>
+                                <div class="col-sm-8"><input id="inputGithub" class="form-control" type="url"></div>
+                            </div>
+                        </section>
                     </section>
                     <div class="text-end"><button class="btn btn-primary px-4 py-2" type="submit">Gửi ứng tuyển</button></div>
                 </form>
@@ -87,31 +115,12 @@
                 const response = await fetch('/json/schema.json');
                 if (response.ok) {
                     currentSchema = await response.json();
-                    renderDynamicFields();
                 } else {
                     console.warn("Không tìm thấy schema, vui lòng tạo bên trang Trích xuất");
                 }
             } catch (e) {
                 console.error("Lỗi tải schema:", e);
             }
-        }
-
-        function renderDynamicFields() {
-            const container = document.getElementById('dynamicFormFields');
-            container.innerHTML = '';
-            currentSchema.forEach(field => {
-                const typeMap = { 'text': 'text', 'number': 'number', 'date': 'date' };
-                const inputType = typeMap[field.type] || 'text';
-                const html = `
-                    <div class="row mb-3">
-                        <label class="col-sm-4 col-form-label">${field.name}</label>
-                        <div class="col-sm-8">
-                            <input id="field_${field.name}" name="${field.name}" class="form-control" type="${inputType}" placeholder="${field.description}">
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += html;
-            });
         }
         
         window.addEventListener('DOMContentLoaded', loadSchema);
@@ -165,7 +174,7 @@
                     }
 
                     console.log("Extracted Text:", rawText);
-                    fillFormWithHeuristics(rawText);
+                    fillFormWithExtractedData(rawText);
                 }
 
                 const endTime = performance.now();
@@ -256,7 +265,7 @@
 
         function fillFormWithJson(jsonObj) {
             for (const key in jsonObj) {
-                const input = document.getElementById(`field_${key}`);
+                const input = document.getElementById(key);
                 if (input) {
                     input.value = jsonObj[key];
                 }
@@ -309,30 +318,42 @@
             return result.data.text;
         }
 
-        function fillFormWithHeuristics(text) {
-            const lowerText = text.toLowerCase();
-            currentSchema.forEach(field => {
-                const fname = field.name.toLowerCase();
-                const input = document.getElementById(`field_${field.name}`);
-                if (!input) return;
-                
-                if (fname.includes('email')) {
-                    const match = text.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/);
-                    if (match) input.value = match[0];
-                } else if (fname.includes('phone') || fname.includes('điện thoại')) {
-                    const match = text.match(/(?:(?:\+?84|0)(?:\s|\.)?)?[35789]\d{1}(?:\s|\.)?\d{3}(?:\s|\.)?\d{4}\b/);
-                    if (match) input.value = match[0].replace(/[\s\.]/g, '');
-                } else if (fname.includes('link') || fname.includes('url')) {
-                    const match = text.match(/(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+/);
-                    if (match) input.value = match[0];
-                } else if (fname.includes('name') || fname.includes('tên')) {
-                    const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 3 && l.split(' ').length >= 2 && l.split(' ').length <= 5);
-                    const nameCandidate = lines.find(l => !/curriculum|vitae|resume|sơ yếu|lý lịch/i.test(l));
-                    if (nameCandidate && !input.value) {
-                        input.value = nameCandidate.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
-                    }
+        function fillFormWithExtractedData(text) {
+            // 1. Email
+            const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/;
+            const emailMatch = text.match(emailRegex);
+            if (emailMatch && document.getElementById('inputEmail')) {
+                document.getElementById('inputEmail').value = emailMatch[0];
+            }
+
+            // 2. Phone
+            // Regex cho số điện thoại kiểu Việt Nam (+84, 09, 03...)
+            const phoneRegex = /(?:(?:\+?84|0)(?:\s|\.)?)?[35789]\d{1}(?:\s|\.)?\d{3}(?:\s|\.)?\d{4}\b/;
+            const phoneMatch = text.match(phoneRegex);
+            if (phoneMatch && document.getElementById('inputPhone')) {
+                const cleanedPhone = phoneMatch[0].replace(/[\s\.]/g, ''); // Xóa khoảng trắng/dấu chấm
+                document.getElementById('inputPhone').value = cleanedPhone;
+            }
+
+            // 3. LinkedIn
+            const linkedinRegex = /(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+/;
+            const linkedinMatch = text.match(linkedinRegex);
+            if (linkedinMatch && document.getElementById('inputLinkedin')) {
+                let url = linkedinMatch[0];
+                if (!url.startsWith('http')) url = 'https://' + url;
+                document.getElementById('inputLinkedin').value = url;
+            }
+
+            // 4. Tên (Heuristic: lấy dòng đầu tiên hoặc thứ 2 trông có vẻ giống Tên)
+            const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 3 && l.split(' ').length >= 2 && l.split(' ').length <= 5);
+            if (lines.length > 0 && document.getElementById('inputName')) {
+                const nameCandidate = lines.find(l => !/curriculum|vitae|resume|sơ yếu|lý lịch/i.test(l));
+                if (nameCandidate && !document.getElementById('inputName').value) {
+                    // Chữ cái đầu mỗi từ viết hoa (cho đẹp)
+                    const formattedName = nameCandidate.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+                    document.getElementById('inputName').value = formattedName;
                 }
-            });
+            }
         }
     </script>
 </body>

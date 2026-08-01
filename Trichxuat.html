@@ -114,11 +114,15 @@
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script>
         let schemaData = [
-            { name: "name", type: "text", description: "Họ và tên của cá nhân" },
-            { name: "email", type: "text", description: "Địa chỉ email liên hệ" },
-            { name: "linkedinProfile", type: "text", description: "URL hồ sơ LinkedIn" },
-            { name: "blogUrl", type: "text", description: "URL blog cá nhân hoặc chuyên ngành" },
-            { name: "topSkills", type: "text", description: "Danh sách kỹ năng chính hoặc lĩnh vực chuyên môn" }
+            { name: "inputName", type: "text", description: "Họ và tên của ứng viên" },
+            { name: "inputEmail", type: "text", description: "Địa chỉ email liên hệ chính" },
+            { name: "inputPhone", type: "text", description: "Số điện thoại liên hệ" },
+            { name: "inputAddress", type: "text", description: "Địa chỉ hiện tại" },
+            { name: "inputCompany", type: "text", description: "Công ty hiện tại đang làm việc (nếu có)" },
+            { name: "inputLinkedin", type: "text", description: "URL tài khoản LinkedIn" },
+            { name: "inputTwitter", type: "text", description: "URL tài khoản Twitter" },
+            { name: "inputGmail", type: "text", description: "Địa chỉ Gmail (nếu có)" },
+            { name: "inputGithub", type: "text", description: "URL Github hoặc trang Portfolio" }
         ];
 
         function renderSchema() {
